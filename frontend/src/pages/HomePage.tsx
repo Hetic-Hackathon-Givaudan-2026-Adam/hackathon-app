@@ -4,7 +4,7 @@ import { FlaskConical, Package, Plus } from "lucide-react";
 import PageHeader from "../components/ui/PageHeader";
 import ProjectList from "../components/home/ProjectList";
 import SummaryCard from "../components/home/SummaryCard";
-import { ORDERS, SAMPLES, USER } from "../data/mock";
+import { ORDERS, SAMPLES, STEP_LABELS, USER } from "../data/mock";
 import type { ViewState } from "../types";
 
 const VIEW_STATES: { key: ViewState; label: string }[] = [
@@ -16,7 +16,7 @@ const VIEW_STATES: { key: ViewState; label: string }[] = [
 
 export default function HomePage() {
   const [view, setView] = useState<ViewState>("list");
-  const sample = SAMPLES[0];
+  const sample = SAMPLES[1];
   const order = ORDERS[0];
 
   return (
@@ -26,7 +26,7 @@ export default function HomePage() {
         title={`Bonjour, ${USER.firstName}`}
         subtitle="Retrouvez vos projets et les prochaines étapes en un coup d’œil."
         action={
-          <Link to="/projets" className="btn btn--primary">
+          <Link to="/projets/nouveau" className="btn btn--primary">
             <Plus size={18} />
             Nouveau projet
           </Link>
@@ -58,17 +58,17 @@ export default function HomePage() {
           icon={FlaskConical}
           title="Échantillons en cours"
           to="/echantillons"
-          name={sample.name}
-          detail={sample.delivery}
-          status={sample.status}
-          tone={sample.tone}
+          name={`${sample.project} — V${sample.version}`}
+          detail={`Commandé le ${sample.orderedOn}`}
+          status={STEP_LABELS[sample.step - 1]}
+          tone="warning"
         />
         <SummaryCard
           icon={Package}
           title="Dernière commande"
           to="/commandes"
           name={order.reference}
-          detail={`${order.product} · ${order.quantity}`}
+          detail={`${order.project} · ${order.date}`}
           status={order.status}
           tone={order.tone}
         />
