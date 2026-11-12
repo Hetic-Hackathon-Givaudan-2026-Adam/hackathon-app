@@ -1,0 +1,48 @@
+.layout { display: flex; min-height: 100vh; }
+.layout__main { flex: 1; min-width: 0; }
+
+/* Sidebar */
+.sidebar {
+  width: 235px; flex-shrink: 0; position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; padding: 32px 25px 24px;
+  background: var(--sidebar); border-right: 1px solid var(--border);
+}
+.sidebar__logo { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 36px; }
+.sidebar__nav { display: flex; flex-direction: column; gap: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 14px; padding: 11px 14px;
+  border-radius: 8px; color: var(--muted); font-size: 15px;
+}
+.nav-item:hover { background: #efefed; }
+.nav-item--active { background: var(--active); color: var(--text); font-weight: 600; }
+.sidebar__bottom { margin-top: auto; display: flex; flex-direction: column; gap: 14px; }
+.help {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; text-align: left;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+}
+.help strong { font-size: 12px; display: block; }
+.help small { font-size: 10px; }
+.account { display: flex; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid var(--border); }
+.account small { font-size: 12px; }
+
+.avatar {
+  display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--active); font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+
+/* Topbar */
+.topbar {
+  height: 76px; display: flex; align-items: center; justify-content: flex-end; gap: 22px;
+  padding: 0 40px; border-bottom: 1px solid var(--border); background: var(--bg);
+}
+.lang { display: flex; padding: 3px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.lang__btn { border: 0; background: none; padding: 5px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--muted); }
+.lang__btn--active { background: var(--active); color: var(--text); }
+.user { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+
+.content { max-width: 1082px; margin: 0 auto; padding: 56px 20px 64px; }
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .topbar { padding: 0 20px; }
+}
