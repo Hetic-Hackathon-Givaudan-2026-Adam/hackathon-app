@@ -32,7 +32,7 @@
 
 /* Topbar */
 .topbar {
-  height: 76px; display: flex; align-items: center; justify-content: flex-end; gap: 22px;
+  height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 22px;
   padding: 0 40px; border-bottom: 1px solid var(--border); background: var(--bg);
 }
 .lang { display: flex; padding: 3px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
@@ -46,3 +46,7 @@
   .sidebar { display: none; }
   .topbar { padding: 0 20px; }
 }
+
+.topbar__right { display: flex; align-items: center; gap: 22px; margin-left: auto; }
+.breadcrumb { display: flex; gap: 8px; font-size: 13px; color: var(--muted); padding-left: 2px; }
+.breadcrumb a:hover { color: var(--text); }

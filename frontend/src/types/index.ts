@@ -3,6 +3,12 @@ import type { LucideIcon } from "lucide-react";
 export type Lang = "fr" | "en";
 export type ViewState = "list" | "empty" | "loading" | "error";
 export type Tone = "warning" | "success";
+export type ProjectKind = "Goût" | "Saveur" | "Senteur";
+
+export interface LayoutCtx {
+  lang: Lang;
+  setLang: (lang: Lang) => void;
+}
 
 export interface Project {
   id: string;
@@ -16,17 +22,23 @@ export interface Project {
 
 export interface Sample {
   id: string;
-  name: string;
-  delivery: string;
-  status: string;
-  tone: Tone;
+  ref: string;
+  project: string;
+  version: number;
+  orderedOn: string;
+  step: 1 | 2 | 3;
 }
 
 export interface Order {
   id: string;
   reference: string;
-  product: string;
-  quantity: string;
+  project: string;
+  date: string;
   status: string;
   tone: Tone;
+}
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
 }
