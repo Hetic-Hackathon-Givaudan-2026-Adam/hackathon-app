@@ -50,6 +50,7 @@ export default function ProjectsPage() {
   return (
     <>
       <PageHeader
+        eyebrow="PROJETS"
         title="Mes projets"
         subtitle="Tous vos projets, du brief à la validation."
         action={
