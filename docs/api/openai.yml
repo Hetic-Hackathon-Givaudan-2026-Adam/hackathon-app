@@ -1,0 +1,333 @@
+openapi: 3.0.3
+
+info:
+  title: Givaudan Intelligent Ordering API
+  description: |
+    API de la plateforme de commande intelligente Givaudan.
+
+    Cette API permet aux clients de décrire leurs besoins,
+    d'interagir avec un assistant intelligent, de consulter
+    des recommandations de produits et de préparer des
+    demandes d'échantillons.
+
+    IMPORTANT :
+    Cette documentation est une première proposition.
+    Les routes, les données et les réponses doivent être
+    validées avec les équipes Tech, Data et Product.
+  version: 0.1.0
+  contact:
+    name: Équipe Hackathon Givaudan
+
+servers:
+  - url: http://localhost:3000/api
+    description: Serveur local de développement
+
+tags:
+  - name: Health
+    description: Vérification du fonctionnement de l'API
+
+  - name: Products
+    description: Consultation du catalogue de produits
+
+  - name: Chat
+    description: Communication avec l'assistant intelligent
+
+  - name: Recommendations
+    description: Recommandations de produits
+
+  - name: Sample Requests
+    description: Gestion des demandes d'échantillons
+
+paths:
+
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Vérifier le fonctionnement de l'API
+      operationId: getHealth
+      responses:
+        "200":
+          description: API opérationnelle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Récupérer le catalogue des produits
+      operationId: getProducts
+      parameters:
+        - name: search
+          in: query
+          description: Rechercher un produit par nom ou mot-clé
+          required: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filtrer les produits par catégorie
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Catalogue récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Consulter un produit
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Produit récupéré
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /chat:
+    post:
+      tags:
+        - Chat
+      summary: Envoyer un message à l'assistant intelligent
+      operationId: sendChatMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: Réponse de l'assistant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /recommendations:
+    post:
+      tags:
+        - Recommendations
+      summary: Obtenir des recommandations de produits
+      operationId: getRecommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecommendationRequest"
+      responses:
+        "200":
+          description: Recommandations générées
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecommendationResponse"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /sample-requests:
+    post:
+      tags:
+        - Sample Requests
+      summary: Créer une demande d'échantillons
+      operationId: createSampleRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SampleRequest"
+      responses:
+        "201":
+          description: Demande créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleRequestResponse"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+components:
+
+  schemas:
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        message:
+          type: string
+          example: API is running
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: product-123
+        name:
+          type: string
+          example: Natural Strawberry Flavor
+        category:
+          type: string
+          example: Flavour
+        description:
+          type: string
+          example: Arôme naturel de fraise
+        ingredients:
+          type: array
+          items:
+            type: string
+
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: Je cherche un arôme pour une boisson protéinée.
+        sessionId:
+          type: string
+          nullable: true
+          example: session-123
+
+    ChatResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          example: session-123
+        response:
+          type: string
+          example: Quel profil de goût recherchez-vous ?
+        recommendations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+
+    RecommendationRequest:
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          example: Boisson protéinée pour sportifs avec un goût fruité.
+        category:
+          type: string
+          example: Flavour
+
+    RecommendationResponse:
+      type: object
+      properties:
+        recommendations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+
+    SampleRequest:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: string
+          example: product-123
+        quantity:
+          type: integer
+          minimum: 1
+          example: 3
+        description:
+          type: string
+          example: Échantillons pour un projet de boisson protéinée.
+        customerEmail:
+          type: string
+          format: email
+          example: customer@example.com
+
+    SampleRequestResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: request-123
+        status:
+          type: string
+          example: pending
+        message:
+          type: string
+          example: Votre demande a été préparée.
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Une erreur est survenue.
+        statusCode:
+          type: integer
+          example: 400
+
+  responses:
+
+    BadRequest:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    NotFound:
+      description: Ressource introuvable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    ServerError:
+      description: Erreur interne du serveur
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
