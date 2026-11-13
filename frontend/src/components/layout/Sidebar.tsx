@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FlaskConical, FolderOpen, Headset, House, Package, User } from "lucide-react";
 import { USER } from "../../data/mock";
 
@@ -30,13 +30,13 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar__bottom">
-        <button className="help">
+        <Link to="/assistant" className="help">
           <Headset size={18} strokeWidth={1.6} />
           <span>
             <strong>Besoin d’aide ?</strong>
-            <small>Contacter un conseiller</small>
+            <small>Discuter avec l’assistant</small>
           </span>
-        </button>
+        </Link>
 
         <div className="account">
           <span className="avatar">{USER.companyInitials}</span>
